@@ -79,40 +79,77 @@ class List {
 
         void pop_front()
         {
-            if (head ==NULL)
+            if (head == NULL)
             {
-
+                throw "Empty list";
+                return;
             }
+
+            Node<T> *temp = head;
+            head = head->next;
+            delete temp;
+            nodes--;
         }
         
         void pop_back()
         {
+            if (head == NULL)
+            {
+                throw "Empty list";
+                return;
+            }
+
+            Node<T> *tail_copy = tail;
+
+            if (head->next == NULL)
+            {
+                head = NULL;
+                tail = NULL;
+                delete tail_copy;
+                nodes--;
+                return;
+            }
+
+            Node<T> *temp = head;
+
+            for (int i = 0; i < nodes; i++)
+            {
+                if(temp->next == tail)
+                {
+                    tail = temp;
+                    continue; 
+                }
+                temp = temp->next;
+            }
+            delete tail_copy;
+            nodes--;
+            tail->next = NULL;
 
         }
 
         T get(int position)
         {
-            if (position >= nodes)
+            if (position >= nodes || position < 0)
             {
-                throw out_of_range("Position requested bigger than array size!")
+                throw out_of_range("Request is out of range!");
+                return;
             }
 
-            int index = 0;
             Node<T> *temp = head;
-            while (temp != NULL)
+            for (int i = 0; i < nodes; i++)
             {
-                if(index == position)
+                if(i == position)
                 {
                     return temp->data;
                 }
-                temp = temp->next;
-                index++;
+                temp = temp->next;   
             } 
         }
 
         void concat(List<T> &other)
         {
             tail->next = other->head;
+            nodes += other->nodes;
             return;
         }
         
@@ -137,8 +174,18 @@ class List {
             return;
         }
 
-        void print_reverse();
-        void clear();
+        void print_reverse()
+        {
+            if(head != NULL)
+                head->printReverse();
+        }
+        
+        void clear()
+        {
+            if(head != NULL)
+                head->killSelf();
+        }
+
         Iterator<T> begin();
         Iterator<T> end();
 

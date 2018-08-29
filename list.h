@@ -132,7 +132,6 @@ class List {
             if (position >= nodes || position < 0)
             {
                 throw out_of_range("Request is out of range!");
-                return;
             }
 
             Node<T> *temp = head;
